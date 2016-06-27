@@ -2,31 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Planet Information Web Page</title>
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>AJAX Chat</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="md-col-12">
-                <div class="well">
+    
+    <br/>
+		<form id = "chat_form" onsubmit="return addComment();">
+			<header>Chatroom</header>	
+			<br/>
+			<label>User Name</label>
+			<input type="text" id="user_name" name="user_name" value="" />
+			<label>Last Displayed Chat ID</label>
+			<input type="text" id="last_displayed_chat_id" name="last_displayed_chat_id" value="0" readonly />
+			<label>Chat</label>
+			<textarea rows="20" id="chat_box"></textarea>
+			<label>Add Comment</label>
+			<input type="text" name="user_comment" id="user_comment">
+			<input type="Submit" value="Add Comment" />
+			<br/>
+		</form>
+		<br/>
 
-                    <h3>Planet Name:</h3> <input type="text" 
-                                                 id="planet_name" 
-                                                 name="planet_name"
-                                                 placeholder="Enter Planet Name"
-                                                 onkeyup="getPlanetDetails();">
-                    <br>
-                    <br>
-                    <p>Suggestions:</p>
-                    <p id="suggestion_box">See Your Suggestions Here</p>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="js/jquery2.js"></script>
-    <script src="js/ajax.js"></script>
+    <script src="jquery3.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,30 +1,45 @@
-<?php	
-	
-	// Receive the Data from Client
+<?php
+
+	// Lets fetch the value of last_displayed_chat_id
 	$data = $_REQUEST;
-	$name = $data['planet_name'];
+	$last_displayed_chat_id = $data['last_displayed_chat_id'];
 	
-	// Result Array
-	$result = array();
+	// Connect to MySQL Server
+	$con = mysqli_connect( "localhost" , "root" , "" , "group_chat" );
+		
+	// If user_name and user_comment is available, 
+	//	then add it in table chats
+
+	if( isset($data['user_name']) && isset($data['user_comment']) ){
+		$insert = "
+		INSERT INTO chats( user_name, user_comment )
+		VALUES( '".$data['user_name']."' , '".$data['user_comment']."')
+		";
+
+		$insert_result = mysqli_query( $con , $insert );
+	}
 	
-	// Data Array
-	$planet_details = array( 
-		array( 'name' => 'Mercury' , 'order_no' => '1' , 'no_of_days_in_year' => '87' ),
-		array( 'name' => 'Venus' , 'order_no' => '2' , 'no_of_days_in_year' => '224' ),
-		array( 'name' => 'Earth' , 'order_no' => '3' , 'no_of_days_in_year' => '365' ),
-		array( 'name' => 'Mars' , 'order_no' => '4' , 'no_of_days_in_year' => '686' ),
-		array( 'name' => 'Jupiter' , 'order_no' => '5' , 'no_of_days_in_year' => '4332' ),
-		array( 'name' => 'Saturn' , 'order_no' => '6' , 'no_of_days_in_year' => '10755' ),
-		array( 'name' => 'Uranus' , 'order_no' => '7' , 'no_of_days_in_year' => '30687' ),
-		array( 'name' => 'Neptune' , 'order_no' => '8' , 'no_of_days_in_year' => '60190' )
-	);
 	
-	for( $count = 0 ; $count < count( $planet_details ) ; $count++ ) {
-		if( stripos( $planet_details[$count]['name'] , $name ) !== false ) {
-			array_push( $result , $planet_details[$count] );
+
+	$select = "SELECT * 
+				FROM chats
+				WHERE chat_id > '".$last_displayed_chat_id."'
+			";
+	$result = mysqli_query( $con , $select );
+	
+	$arr = array();
+	$row_count = mysqli_num_rows( $result );
+	
+	if( $row_count > 0 ) {
+		while( $row = mysqli_fetch_array( $result ) ) {
+			array_push( $arr , $row );
 		}
 	}
 	
-	// Return Response as JSON
-	echo json_encode( $result );	
+	// Close the MySQL Connection
+	mysqli_close( $con );
+	
+	// Return the response as JSON
+	echo json_encode( $arr );
+
 ?>
